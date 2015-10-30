@@ -35,6 +35,20 @@ public class UndoRedoHelper {
     final com.intellij.openapi.command.undo.UndoManager undoManager = com.intellij.openapi.command.undo.UndoManager.getInstance(project);
     if (fileEditor != null && undoManager.isUndoAvailable(fileEditor)) {
       undoManager.undo(fileEditor);
+
+      System.out.println(undoManager.getUndoActionNameAndDescription(fileEditor));
+
+      String action;
+      while ((action = undoManager.getUndoActionNameAndDescription(fileEditor).getFirst()) != null &&
+             (action.equals("_Undo Typing") ||
+              action.equals("_Undo Choose Lookup Item") ||
+              action.equals("_Undo Vim Backspace")) &&
+             undoManager.isUndoAvailable(fileEditor)) {
+        System.out.println(action);
+        undoManager.undo(fileEditor);
+      }
+
+      System.out.println(undoManager.getUndoActionNameAndDescription(fileEditor));
       return true;
     }
     return false;
@@ -46,6 +60,20 @@ public class UndoRedoHelper {
     final com.intellij.openapi.command.undo.UndoManager undoManager = com.intellij.openapi.command.undo.UndoManager.getInstance(project);
     if (fileEditor != null && undoManager.isRedoAvailable(fileEditor)) {
       undoManager.redo(fileEditor);
+
+      System.out.println(undoManager.getRedoActionNameAndDescription(fileEditor));
+
+      String action;
+      while ((action = undoManager.getRedoActionNameAndDescription(fileEditor).getFirst()) != null &&
+             (action.equals("_Redo Typing") ||
+              action.equals("_Redo Choose Lookup Item") ||
+              action.equals("_Redo Vim Backspace")) &&
+             undoManager.isRedoAvailable(fileEditor)) {
+        System.out.println(action);
+        undoManager.redo(fileEditor);
+      }
+
+      System.out.println(undoManager.getRedoActionNameAndDescription(fileEditor));
       return true;
     }
     return false;
